@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using AutoMapper;
 using Boilerplate.Cache;
 using Boilerplate.Contracts.V1;
 using Boilerplate.Contracts.V1.Requests;
@@ -16,10 +17,12 @@ namespace Boilerplate.Controllers.V1
     public class Test : Controller
     {
         private readonly IUriService _uriService;
+        private readonly IMapper _mapper;
 
-        public Test(IUriService uriService)
+        public Test(IUriService uriService, IMapper mapper)
         {
             _uriService = uriService;
+            _mapper = mapper;
         }
         
         [HttpGet(ApiRoutes.Tests.GetAll)]
@@ -27,11 +30,7 @@ namespace Boilerplate.Controllers.V1
         [Cached(15)]
         public IActionResult GetAll([FromQuery] PaginationQuery paginationQuery)
         {
-            var pagination = new PaginationFilter
-            {
-                PageNumber = paginationQuery.PageNumber,
-                PageSize = paginationQuery.PageSize
-            };
+            var pagination = _mapper.Map<PaginationFilter>(paginationQuery);
 
             var result = new List<TestDocumentResponse>();
             var paginationResponse = PaginationHelpers.CreatePaginatedResponse(_uriService, pagination, result);
@@ -68,7 +67,7 @@ namespace Boilerplate.Controllers.V1
             };
 
             var locationUri = _uriService.GetNewDocumentUri(ApiRoutes.Tests.Get, "{testId}", id);
-            var result = new Response<TestDocumentResponse>(response);
+            var result = new Response<TestDocumentResponse>(_mapper.Map<TestDocumentResponse>(response));
             
             return Created(locationUri, result);
         }
