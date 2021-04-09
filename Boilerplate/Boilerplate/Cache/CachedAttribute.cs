@@ -56,7 +56,7 @@ namespace Boilerplate.Cache
                     await cacheService.CacheResponseAsync(cacheKey, okObjectResult.Value, TimeSpan.FromSeconds(_timeToLiveSeconds));
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 await next();
             }

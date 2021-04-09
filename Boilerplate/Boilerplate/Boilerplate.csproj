@@ -10,6 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="FluentValidation.AspNetCore" Version="10.0.2" />
         <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="5.0.1" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.1" />
@@ -17,7 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Remove="Installer\MvcInstaller.cs" />
+      <Compile Remove="Contracts\BadRequestResponse.cs" />
     </ItemGroup>
 
 </Project>

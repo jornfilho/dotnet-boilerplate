@@ -14,11 +14,16 @@ namespace Boilerplate.Controllers
         /// <response code="400">Invalid request data</response>
         [HttpPost("api/v1/test")]
         [ProducesResponseType(typeof(CreateResponse), 200)]
-        [ProducesResponseType(typeof(BadRequestResponse), 400)]
+        [ProducesResponseType(typeof(ErrorResponse), 400)]
         [Cached(600)]
         public IActionResult Index([FromBody] CreateRequest request)
         {
-            var response = new CreateResponse();
+            var response = new CreateResponse
+            {
+                Id = "H7I9#02",
+                Name = request.Name,
+                Email = request.Email
+            };
             return Ok(response);
         }
     }

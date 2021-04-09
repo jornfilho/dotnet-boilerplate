@@ -1,6 +1,5 @@
 # TODO
 
- - Validators
  - Mapper
  - Pagination
  - MsSQL
