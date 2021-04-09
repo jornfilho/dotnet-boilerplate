@@ -1,4 +1,5 @@
 using Boilerplate.Installer;
+using Boilerplate.Options;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -29,8 +30,15 @@ namespace Boilerplate
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Boilerplate v1"));
+
+                var swaggerOptions = new SwaggerOptions();
+                Configuration.GetSection(nameof(SwaggerOptions)).Bind(swaggerOptions);
+
+                app.UseSwagger(option => { option.RouteTemplate = swaggerOptions.JsonRoute; });
+                app.UseSwaggerUI(option =>
+                {
+                    option.SwaggerEndpoint(swaggerOptions.UiEndpoint, swaggerOptions.Description);
+                });
             }
 
             app.UseHttpsRedirection();
