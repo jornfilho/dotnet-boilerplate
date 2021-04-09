@@ -4,11 +4,11 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace Boilerplate.SwaggerExamples.Responses
 {
-    public class CreateResponseExample : IExamplesProvider<CreateResponse>
+    public class CreateResponseExample : IExamplesProvider<TestDocumentResponse>
     {
-        public CreateResponse GetExamples()
+        public TestDocumentResponse GetExamples()
         {
-            return new CreateResponse
+            return new TestDocumentResponse
             {
                 Id = "A8G4)u&",
                 Name = "Sample name",

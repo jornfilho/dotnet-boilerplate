@@ -1,7 +1,12 @@
+using System.Collections.Generic;
 using Boilerplate.Cache;
 using Boilerplate.Contracts.V1;
 using Boilerplate.Contracts.V1.Requests;
+using Boilerplate.Contracts.V1.Requests.Queries;
 using Boilerplate.Contracts.V1.Responses;
+using Boilerplate.Domain;
+using Boilerplate.Helpers;
+using Boilerplate.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Boilerplate.Controllers.V1
@@ -10,18 +15,39 @@ namespace Boilerplate.Controllers.V1
     [ProducesResponseType(typeof(ErrorResponse), 400)]
     public class Test : Controller
     {
-        [HttpGet(ApiRoutes.Tests.GetAll)]
-        [Cached(15)]
-        public IActionResult GetAll()
+        private readonly IUriService _uriService;
+
+        public Test(IUriService uriService)
         {
-            return Ok();
+            _uriService = uriService;
+        }
+        
+        [HttpGet(ApiRoutes.Tests.GetAll)]
+        [ProducesResponseType(typeof(PagedResponse<List<TestDocumentResponse>>), 200)]
+        [Cached(15)]
+        public IActionResult GetAll([FromQuery] PaginationQuery paginationQuery)
+        {
+            var pagination = new PaginationFilter
+            {
+                PageNumber = paginationQuery.PageNumber,
+                PageSize = paginationQuery.PageSize
+            };
+
+            var result = new List<TestDocumentResponse>();
+            var paginationResponse = PaginationHelpers.CreatePaginatedResponse(_uriService, pagination, result);
+
+            return Ok(paginationResponse);
         }
         
         [HttpGet(ApiRoutes.Tests.Get)]
+        [ProducesResponseType(typeof(Response<TestDocumentResponse>), 200)]
         [Cached(600)]
         public IActionResult Get([FromRoute]string testId)
         {
-            return Ok();
+            var data = new TestDocumentResponse();
+            var result = new Response<TestDocumentResponse>(data);
+
+            return Ok(result);
         }
         
         /// <summary>
@@ -30,16 +56,21 @@ namespace Boilerplate.Controllers.V1
         /// <response code="200">Success on creation</response>
         /// <response code="400">Invalid request data</response>
         [HttpPost(ApiRoutes.Tests.Create)]
-        [ProducesResponseType(typeof(CreateResponse), 200)]
+        [ProducesResponseType(typeof(TestDocumentResponse), 201)]
         public IActionResult Create([FromBody] CreateRequest request)
         {
-            var response = new CreateResponse
+            var id = "H7I9#02";
+            var response = new TestDocumentResponse
             {
-                Id = "H7I9#02",
+                Id = id,
                 Name = request.Name,
                 Email = request.Email
             };
-            return Ok(response);
+
+            var locationUri = _uriService.GetNewDocumentUri(ApiRoutes.Tests.Get, "{testId}", id);
+            var result = new Response<TestDocumentResponse>(response);
+            
+            return Created(locationUri, result);
         }
         
         [HttpPut(ApiRoutes.Tests.Update)]
