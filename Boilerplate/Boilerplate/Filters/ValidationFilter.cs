@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Boilerplate.Contracts;
+using Boilerplate.Contracts.V1.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 

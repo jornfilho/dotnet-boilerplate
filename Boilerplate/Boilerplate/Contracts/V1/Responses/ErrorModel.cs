@@ -1,4 +1,4 @@
-namespace Boilerplate.Contracts
+namespace Boilerplate.Contracts.V1.Responses
 {
     public class ErrorModel
     {

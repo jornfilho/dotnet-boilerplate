@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Boilerplate.Contracts
+namespace Boilerplate.Contracts.V1.Responses
 {
     public class ErrorResponse
     {

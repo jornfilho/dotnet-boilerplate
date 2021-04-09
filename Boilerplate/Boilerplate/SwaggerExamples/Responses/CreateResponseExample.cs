@@ -1,4 +1,5 @@
 using Boilerplate.Contracts;
+using Boilerplate.Contracts.V1.Responses;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace Boilerplate.SwaggerExamples.Responses
