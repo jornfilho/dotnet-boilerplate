@@ -1,3 +1,4 @@
+using Boilerplate.Cache;
 using Boilerplate.Contracts;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,6 +15,7 @@ namespace Boilerplate.Controllers
         [HttpPost("api/v1/test")]
         [ProducesResponseType(typeof(CreateResponse), 200)]
         [ProducesResponseType(typeof(BadRequestResponse), 400)]
+        [Cached(600)]
         public IActionResult Index([FromBody] CreateRequest request)
         {
             var response = new CreateResponse();
