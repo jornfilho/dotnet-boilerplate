@@ -1,0 +1,66 @@
+# docker-compose up --remove-orphans
+
+version: '3.8'
+
+networks:
+  localdev:
+    name: localdev
+    
+services:
+  mssql:
+    image: microsoft/mssql-server-linux:2017-latest
+    restart: always
+    container_name: mssql-boilerplate
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=dev-env-123!
+    ports:
+      - "1400:1433"
+    networks:
+      - localdev
+
+  mariadb:
+    image: mariadb:10
+    restart: always
+    container_name: mariadb-boilerplate
+    environment:
+      MYSQL_ROOT_PASSWORD: dev-env-123!
+    ports:
+      - 3306:3306
+    networks:
+      - localdev
+
+  mongodb:
+    image: mongo:4
+    restart: always
+    container_name: mongodb-boilerplate
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: dev-env-123!
+    ports:
+      - 27017:27017
+    networks:
+      - localdev
+
+  redis:
+    image: redis:6
+    restart: always
+    container_name: redis-boilerplate
+    ports:
+      - 6379:6379
+    networks:
+      - localdev
+
+  redis-gui:
+    container_name: redis-gui-boilerplate
+    hostname: redis-gui
+    image: rediscommander/redis-commander:latest
+    restart: always
+    depends_on:
+      - redis
+    environment:
+      REDIS_HOSTS: "local:redis:6379"
+    ports:
+      - 8081:8081
+    networks:
+      - localdev
