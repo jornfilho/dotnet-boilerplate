@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Boilerplate.Data;
 using Boilerplate.Domain;
-using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -9,25 +9,24 @@ namespace Boilerplate.Services
 {
     public class TestMongoTableService : ITestMongoTableService
     {
-        private readonly IMongoCollection<MongoTable> _testMongo;
+        private IMongoCollection<MongoTable> _testTable;
+        private readonly IMongoDbSettings _mongoDbSettings;
+        private readonly IMongoClient _mongoClient;
 
-        public TestMongoTableService(IMongoClient dataContext, IConfiguration configuration)
+        public TestMongoTableService(IMongoClient mongoClient, IMongoDbSettings mongoDbSettings)
         {
-            var connectionString = configuration.GetConnectionString("MongoDb");
-            var databaseName = MongoUrl.Create(connectionString).DatabaseName;
-            var database = dataContext.GetDatabase(databaseName);
-            
-            _testMongo = database.GetCollection<MongoTable>(nameof(MongoTable));
+            _mongoDbSettings = mongoDbSettings;
+            _mongoClient = mongoClient;
         }
 
         public async Task<List<MongoTable>> GetAllAsync(PaginationFilter paginationFilter = null)
         {
             if (paginationFilter == null)
-                return await _testMongo.Find(_ => true).ToListAsync();
+                return await GetCollection().Find(_ => true).ToListAsync();
             
             var skip = (paginationFilter.PageNumber - 1) * paginationFilter.PageSize;
             
-            var data = await _testMongo.Find(_ => true)
+            var data = await GetCollection().Find(_ => true)
                 .Skip(skip)
                 .Limit(paginationFilter.PageSize)
                 .ToListAsync();
@@ -39,13 +38,13 @@ namespace Boilerplate.Services
         {
             var objectId = new ObjectId(id);
             var filter = Builders<MongoTable>.Filter.Eq(c => c.Id, objectId);
-            var data = await _testMongo.Find(filter).FirstOrDefaultAsync();
+            var data = await GetCollection().Find(filter).FirstOrDefaultAsync();
             return data;
         }
 
         public async Task<bool> CreateAsync(MongoTable data)
         {
-            await _testMongo.InsertOneAsync(data);
+            await GetCollection().InsertOneAsync(data);
             return true;
         }
 
@@ -56,7 +55,7 @@ namespace Boilerplate.Services
                 .Set(c => c.Email, data.Email)
                 .Set(c => c.Name, data.Name);
             
-            var updated = await _testMongo.UpdateOneAsync(filter, update);
+            var updated = await GetCollection().UpdateOneAsync(filter, update);
             return updated.MatchedCount > 0;
         }
 
@@ -64,8 +63,21 @@ namespace Boilerplate.Services
         {
             var objectId = new ObjectId(id);
             var filter = Builders<MongoTable>.Filter.Eq(c => c.Id, objectId);
-            var data = await _testMongo.DeleteOneAsync(filter);
+            var data = await GetCollection().DeleteOneAsync(filter);
             return data.DeletedCount > 0;
+        }
+
+        private IMongoCollection<MongoTable> GetCollection()
+        {
+            if (_testTable is not null)
+                return _testTable;
+            
+            var database = _mongoClient.GetDatabase(_mongoDbSettings.Database);
+            var collection = database.GetCollection<MongoTable>(nameof(MongoTable));
+        
+            _testTable = collection;
+            
+            return collection;
         }
     }
 }
