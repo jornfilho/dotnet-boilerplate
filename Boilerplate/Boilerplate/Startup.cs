@@ -41,6 +41,7 @@ namespace Boilerplate
                 app.UseSwaggerUI(option =>
                 {
                     option.SwaggerEndpoint(swaggerOptions.UiEndpoint, swaggerOptions.Description);
+                    option.DefaultModelsExpandDepth(-1);
                 });
             }
 

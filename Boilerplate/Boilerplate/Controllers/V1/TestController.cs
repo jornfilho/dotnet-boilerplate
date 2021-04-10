@@ -25,6 +25,9 @@ namespace Boilerplate.Controllers.V1
             _mapper = mapper;
         }
         
+        /// <summary>
+        /// Documentation sample
+        /// </summary>
         [HttpGet(ApiRoutes.Tests.GetAll)]
         [ProducesResponseType(typeof(PagedResponse<List<TestDocumentResponse>>), 200)]
         [Cached(15)]
@@ -38,22 +41,10 @@ namespace Boilerplate.Controllers.V1
             return Ok(paginationResponse);
         }
         
-        [HttpGet(ApiRoutes.Tests.Get)]
-        [ProducesResponseType(typeof(Response<TestDocumentResponse>), 200)]
-        [Cached(600)]
-        public IActionResult Get([FromRoute]string testId)
-        {
-            var data = new TestDocumentResponse();
-            var result = new Response<TestDocumentResponse>(data);
-
-            return Ok(result);
-        }
-        
         /// <summary>
         /// Documentation sample
         /// </summary>
-        /// <response code="200">Success on creation</response>
-        /// <response code="400">Invalid request data</response>
+        /// <response code="201">Success on creation</response>
         [HttpPost(ApiRoutes.Tests.Create)]
         [ProducesResponseType(typeof(TestDocumentResponse), 201)]
         public IActionResult Create([FromBody] CreateRequest request)
@@ -70,18 +61,6 @@ namespace Boilerplate.Controllers.V1
             var result = new Response<TestDocumentResponse>(_mapper.Map<TestDocumentResponse>(response));
             
             return Created(locationUri, result);
-        }
-        
-        [HttpPut(ApiRoutes.Tests.Update)]
-        public IActionResult Update([FromRoute]string testId, [FromBody] UpdateRequest request)
-        {
-            return Ok();
-        }
-        
-        [HttpDelete(ApiRoutes.Tests.Delete)]
-        public IActionResult Delete([FromRoute]string testId)
-        {
-            return Ok();
         }
     }
 }
