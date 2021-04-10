@@ -4,8 +4,8 @@ namespace Boilerplate.Contracts.V1.Requests.Queries
     {
         public PaginationQuery()
         {
-            PageNumber = 1;
-            PageSize = 100;
+            PageNumber = DefaultPageNumber;
+            PageSize = DefaultPageSize;
         }
 
         public PaginationQuery(int pageNumber, int pageSize)
@@ -17,5 +17,18 @@ namespace Boilerplate.Contracts.V1.Requests.Queries
         public int PageNumber { get; set; }
 
         public int PageSize { get; set; }
+
+        private const int DefaultPageSize = 100;
+        private const int DefaultPageNumber = 1;
+
+        public int GetDefaultPageSize()
+        {
+            return DefaultPageSize;
+        }
+        
+        public int GetDefaultPageNumber()
+        {
+            return DefaultPageNumber;
+        }
     }
 }
