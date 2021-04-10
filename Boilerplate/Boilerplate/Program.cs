@@ -21,8 +21,10 @@ namespace Boilerplate
             using (var serviceScope = host.Services.CreateScope())
             {
                 var dbMsSqlContext = serviceScope.ServiceProvider.GetRequiredService<MsSqlDataContext>();
+                var dbMySqlContext = serviceScope.ServiceProvider.GetRequiredService<MySqlDataContext>();
 
                 await dbMsSqlContext.Database.MigrateAsync();
+                await dbMySqlContext.Database.MigrateAsync();
             }
             
             await host.RunAsync();

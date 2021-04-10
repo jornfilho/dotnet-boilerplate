@@ -10,6 +10,7 @@ namespace Boilerplate.MappingProfiles
         {
             CreateMap<TestDocument, TestDocumentResponse>();
             CreateMap<MsSqlTable, TestMsSqlDocumentResponse>();
+            CreateMap<MySqlTable, TestMySqlDocumentResponse>();
         }
     }
 }
