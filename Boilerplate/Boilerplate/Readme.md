@@ -2,4 +2,3 @@
 
  - Refit
  - Tests
- - Health check

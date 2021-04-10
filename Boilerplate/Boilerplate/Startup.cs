@@ -1,11 +1,16 @@
+using System.Linq;
 using AutoMapper;
+using Boilerplate.Contracts.V1.Responses;
 using Boilerplate.Installer;
 using Boilerplate.Options;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 
 namespace Boilerplate
 {
@@ -44,6 +49,29 @@ namespace Boilerplate
                     option.DefaultModelsExpandDepth(-1);
                 });
             }
+            
+            app.UseHealthChecks("/health", new HealthCheckOptions
+            {
+                ResponseWriter = async (context, report) =>
+                {
+                    context.Response.ContentType = "application/json";
+
+                    var response = new HealthCheckResponse
+                    {
+                        Status = report.Status.ToString(),
+                        Checks = report.Entries.Select(x => new HealthCheck
+                        {
+                            Component = x.Key,
+                            Status = x.Value.Status.ToString(),
+                            Description = x.Value.Description,
+                            IndividualDuration = x.Value.Duration
+                        }),
+                        TotalDuration = report.TotalDuration
+                    };
+
+                    await context.Response.WriteAsync(JsonConvert.SerializeObject(response));
+                }
+            });
 
             app.UseHttpsRedirection();
 
