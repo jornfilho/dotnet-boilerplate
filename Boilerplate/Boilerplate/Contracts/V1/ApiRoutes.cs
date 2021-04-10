@@ -7,7 +7,7 @@ namespace Boilerplate.Contracts.V1
         public const string Version = "v1";
 
         public const string Base = Root + "/" + Version;
-
+        
         public static class Tests
         {
             private const string ThisBase = Base + "/tests";
@@ -41,6 +41,21 @@ namespace Boilerplate.Contracts.V1
         public static class TestsMySql
         {
             private const string ThisBase = Base + "/tests_mysql";
+            
+            public const string GetAll = ThisBase;
+
+            public const string Update = ThisBase + "/{testId}";
+
+            public const string Delete = ThisBase + "/{testId}";
+
+            public const string Get = ThisBase + "/{testId}";
+
+            public const string Create = ThisBase;
+        }
+        
+        public static class TestsMongo
+        {
+            private const string ThisBase = Base + "/tests_mongo";
             
             public const string GetAll = ThisBase;
 

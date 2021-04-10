@@ -16,6 +16,9 @@ namespace Boilerplate.MappingProfiles
             CreateMap<CreateMySqlRequest, MySqlTable>()
                 .ForMember(x=> x.Id, x=> x.Ignore())
                 .ForMember(x=> x.CreationDate, x=> x.Ignore());
+            CreateMap<CreateMongoRequest, MongoTable>()
+                .ForMember(x=> x.Id, x=> x.Ignore())
+                .ForMember(x=> x.CreationDate, x=> x.Ignore());
         }
     }
 }
