@@ -1,6 +1,5 @@
 # TODO
 
- - MsSQL
  - MySQL ou Maria
  - MongoDB
  - Refit

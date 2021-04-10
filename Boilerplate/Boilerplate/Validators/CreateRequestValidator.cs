@@ -1,5 +1,4 @@
 using System;
-using Boilerplate.Contracts;
 using Boilerplate.Contracts.V1.Requests;
 using FluentValidation;
 

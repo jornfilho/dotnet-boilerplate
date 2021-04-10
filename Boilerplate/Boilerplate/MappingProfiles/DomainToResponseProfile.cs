@@ -9,6 +9,7 @@ namespace Boilerplate.MappingProfiles
         public DomainToResponseProfile()
         {
             CreateMap<TestDocument, TestDocumentResponse>();
+            CreateMap<MsSqlTable, TestMsSqlDocumentResponse>();
         }
     }
 }

@@ -10,15 +10,32 @@ namespace Boilerplate.Contracts.V1
 
         public static class Tests
         {
-            public const string GetAll = Base + "/tests";
+            private const string ThisBase = Base + "/tests";
+            
+            public const string GetAll = ThisBase;
 
-            public const string Update = Base + "/tests/{testId}";
+            public const string Update = ThisBase + "/{testId}";
 
-            public const string Delete = Base + "/tests/{testId}";
+            public const string Delete = ThisBase + "/{testId}";
 
-            public const string Get = Base + "/tests/{testId}";
+            public const string Get = ThisBase + "/{testId}";
 
-            public const string Create = Base + "/tests";
+            public const string Create = ThisBase;
+        }
+        
+        public static class TestsMsSql
+        {
+            private const string ThisBase = Base + "/tests_mssql";
+            
+            public const string GetAll = ThisBase;
+
+            public const string Update = ThisBase + "/{testId}";
+
+            public const string Delete = ThisBase + "/{testId}";
+
+            public const string Get = ThisBase + "/{testId}";
+
+            public const string Create = ThisBase;
         }
     }
 }

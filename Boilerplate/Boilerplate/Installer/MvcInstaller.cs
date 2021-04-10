@@ -1,3 +1,4 @@
+using System;
 using Boilerplate.Filters;
 using Boilerplate.Services;
 using FluentValidation.AspNetCore;
@@ -23,8 +24,10 @@ namespace Boilerplate.Installer
             {
                 var accessor = provider.GetRequiredService<IHttpContextAccessor>();
                 var request = accessor?.HttpContext?.Request;
-                var absoluteUri = string.Concat(request?.Scheme, "://", request?.Host.ToUriComponent(), "/");
-                return new UriService(absoluteUri);
+                
+                var absoluteUri = string.Concat(request?.Scheme, "://", request?.Host.ToUriComponent());
+                var pathUri = string.IsNullOrEmpty(request?.Path) ? "" : request.Path.ToUriComponent();
+                return new UriService(absoluteUri, pathUri);
             });
         }
     }
